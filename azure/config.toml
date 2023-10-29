@@ -1,38 +1,29 @@
 concurrent = 4
 
 [[runners]]
-  name = "Gitlab Docker Autoscaler"
+  name = "azure runner"     
   url = "https://gitlab.com"
-  token = ""
-  shell = "sh"   # use powershell or pwsh for Windows AMIs
+  token = "<snip>"
+  executor = "instance"
 
-  # uncomment for Windows AMIs when the Runner manager is hosted on Linux
-  # environment = ["FF_USE_POWERSHELL_PATH_RESOLVER=1"]
-
-  executor = "docker-autoscaler"
-
-  # Docker Executor config
-  [runners.docker]
-    image = "busybox:latest"
-
-  # Autoscaler config
   [runners.autoscaler]
-    plugin = "fleeting-plugin-azure"
-
     capacity_per_instance = 1
     max_use_count = 1
-    max_instances = 2
-
-    [runners.autoscaler.plugin_config] # plugin specific configuration (see plugin documentation)
-      name             = "gitlab-runner-autoscaling-group"               # AWS Autoscaling Group name
-      #profile          = "default"                     # optional, default is 'default'
-      #config_file      = "/home/user/.aws/config"      # optional, default is '~/.aws/config'
-      #credentials_file = "/home/user/.aws/credentials" # optional, default is '~/.aws/credentials'
-
-    [runners.autoscaler.connector_config]
-      username          = "ubuntu"
-      #use_external_addr = true
+    max_instances = 5
+    plugin = "fleeting-plugin-azure"
 
     [[runners.autoscaler.policy]]
-      idle_count = 2
-      idle_time = "20m0s"
+      idle_count = 0
+      idle_time  = "20m"
+
+    [runners.autoscaler.connector_config]
+      username = "azureuser"
+      password = "<snip>"
+      use_static_credentials = true
+      timeout = "10m"
+      use_external_addr = true
+
+    [runners.autoscaler.plugin_config]
+      name = "ajwalker-fleeting-test"
+      subscription_id = "9b3c4603-cdf2-4099-bec8-8b9e5a2e7105"
+      resource_group_name = "ajwalker-fleeting-plugin"
