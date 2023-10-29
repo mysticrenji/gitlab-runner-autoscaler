@@ -1,0 +1,38 @@
+concurrent = 4
+
+[[runners]]
+  name = "Gitlab Docker Autoscaler"
+  url = "https://gitlab.com"
+  token = ""
+  shell = "sh"   # use powershell or pwsh for Windows AMIs
+
+  # uncomment for Windows AMIs when the Runner manager is hosted on Linux
+  # environment = ["FF_USE_POWERSHELL_PATH_RESOLVER=1"]
+
+  executor = "docker-autoscaler"
+
+  # Docker Executor config
+  [runners.docker]
+    image = "busybox:latest"
+
+  # Autoscaler config
+  [runners.autoscaler]
+    plugin = "fleeting-plugin-aws"
+
+    capacity_per_instance = 1
+    max_use_count = 1
+    max_instances = 2
+
+    [runners.autoscaler.plugin_config] # plugin specific configuration (see plugin documentation)
+      name             = "gitlab-runner-autoscaling-group"               # AWS Autoscaling Group name
+      #profile          = "default"                     # optional, default is 'default'
+      #config_file      = "/home/user/.aws/config"      # optional, default is '~/.aws/config'
+      #credentials_file = "/home/user/.aws/credentials" # optional, default is '~/.aws/credentials'
+
+    [runners.autoscaler.connector_config]
+      username          = "ubuntu"
+      #use_external_addr = true
+
+    [[runners.autoscaler.policy]]
+      idle_count = 2
+      idle_time = "20m0s"
