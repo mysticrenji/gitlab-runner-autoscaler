@@ -10,7 +10,7 @@ packer {
 source "amazon-ebs" "ubuntu" {
   ami_name      = "gitlab-runner-ami"
   instance_type = "t2.micro"
-  region        = "us-west-2"
+  region        = "eu-west-1"
   source_ami = "ami-0571c1aedb4b8c5fc"
   ssh_username = "ubuntu"
 }
