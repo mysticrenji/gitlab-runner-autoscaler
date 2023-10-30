@@ -38,3 +38,24 @@ resource "aws_instance" "instance" {
     "KeepInstanceRunning" = "false"
   }
 }
+
+resource "aws_launch_configuration" "asg_launch_config" {
+  name               = "GitLabASG"
+  image_id           = "your_ami_id"         # Replace with your desired AMI ID
+  instance_type      = "t4g.nano"            # Replace with your desired instance type
+  security_groups    = [var.vpc_security_group_ids.id]  # Replace with your security group ID
+  key_name           = aws_key_pair.kp.key_name       # Replace with your key pair name
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_autoscaling_group" "gitlab_runner_autoscaling_group" {
+  desired_capacity     = 2
+  min_size             = 1
+  max_size             = 2
+  vpc_zone_identifier  = [var.subnet_id]     # Replace with your subnet ID
+  launch_configuration = aws_launch_configuration.asg_launch_config.id
+  health_check_type    = "EC2"
+}
