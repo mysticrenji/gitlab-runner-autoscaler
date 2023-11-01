@@ -3,7 +3,7 @@ resource "aws_vpc" "vpc" {
   cidr_block           = var.vpc_cidr_block
   enable_dns_hostnames = var.vpc_dns_hostnames
   enable_dns_support   = var.vpc_dns_support
- 
+
   tags = {
     "Owner" = var.owner
     "Name"  = "${var.owner}-vpc"
@@ -11,16 +11,16 @@ resource "aws_vpc" "vpc" {
 }
 
 # create-sg.tf
- 
+
 data "http" "myip" {
   url = "http://ipv4.icanhazip.com"
 }
- 
+
 resource "aws_security_group" "sg" {
   name        = "${var.owner}-sg"
   description = "Allow inbound traffic via SSH"
   vpc_id      = aws_vpc.vpc.id
- 
+
   ingress = [{
     description      = "My public IP"
     protocol         = var.sg_ingress_proto
@@ -31,9 +31,9 @@ resource "aws_security_group" "sg" {
     prefix_list_ids  = []
     security_groups  = []
     self             = false
- 
+
   }]
- 
+
   egress = [{
     description      = "All traffic"
     protocol         = var.sg_egress_proto
@@ -44,9 +44,9 @@ resource "aws_security_group" "sg" {
     prefix_list_ids  = []
     security_groups  = []
     self             = false
- 
+
   }]
- 
+
   tags = {
     "Owner" = var.owner
     "Name"  = "${var.owner}-sg"
@@ -54,13 +54,13 @@ resource "aws_security_group" "sg" {
 }
 
 #create-sbn.tf
- 
+
 resource "aws_subnet" "subnet" {
   vpc_id                  = aws_vpc.vpc.id
   cidr_block              = var.sbn_cidr_block
   map_public_ip_on_launch = var.sbn_public_ip
   availability_zone       = "${var.aws_region}${var.aws_region_az}"
- 
+
   tags = {
     "Owner" = var.owner
     "Name"  = "${var.owner}-subnet"
@@ -68,10 +68,10 @@ resource "aws_subnet" "subnet" {
 }
 
 # create-igw.tf
- 
+
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.vpc.id
- 
+
   tags = {
     "Owner" = var.owner
     "Name"  = "${var.owner}-igw"
@@ -79,20 +79,20 @@ resource "aws_internet_gateway" "igw" {
 }
 
 #create-rt.tf
- 
+
 resource "aws_route_table" "rt" {
   vpc_id = aws_vpc.vpc.id
- 
+
   route {
     cidr_block = var.rt_cidr_block
     gateway_id = aws_internet_gateway.igw.id
   }
- 
+
   tags = {
     "Owner" = var.owner
     "Name"  = "${var.owner}-rt"
   }
- 
+
 }
 
 resource "aws_route_table_association" "rt_sbn_asso" {

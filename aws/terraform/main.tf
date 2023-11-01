@@ -20,6 +20,7 @@ module "network" {
 
 module "compute" {
   source                 = "./modules/compute/"
+  account_id = var.account_id
   instance_ami           = var.instance_ami
   aws_region             = var.aws_region
   aws_region_az          = var.aws_region_az

@@ -2,6 +2,10 @@
 
 # Variables for general information
 ######################################
+variable "account_id" {
+  type    = string
+  default = "263827724192"
+}
 
 variable "aws_region" {
   description = "AWS region"
