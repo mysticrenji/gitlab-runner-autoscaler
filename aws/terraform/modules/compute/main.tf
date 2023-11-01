@@ -41,19 +41,18 @@ resource "aws_instance" "instance" {
 
   provisioner "file" {
     source      = "/home/codespace/.ssh/mykey.pem"
-    destination = "/home/ubuntu/mykey.pem"
+    destination = "/home/ubuntu/.ssh/mykey.pem"
 
     connection {
     type     = "ssh"
     user     = "ubuntu"
-    private_key = "/home/codespace/.ssh/mykey.pem"
+    private_key = "${file("/home/codespace/.ssh/mykey.pem")}"
     host     =  "${self.public_dns}"
   }
   }
 }
 
 resource "aws_launch_configuration" "asg_launch_config" {
-  name            = var.asg_name
   image_id        = var.instance_ami                # Replace with your desired AMI ID
   instance_type   = "t4g.nano"                      # Replace with your desired instance type
   security_groups = [var.vpc_security_group_ids.id] # Replace with your security group ID
@@ -65,6 +64,7 @@ resource "aws_launch_configuration" "asg_launch_config" {
 }
 
 resource "aws_autoscaling_group" "gitlab_runner_autoscaling_group" {
+  name = var.asg_name
   desired_capacity     = 2
   min_size             = 1
   max_size             = 2
