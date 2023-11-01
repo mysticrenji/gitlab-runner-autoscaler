@@ -24,6 +24,7 @@ resource "aws_instance" "instance" {
   vpc_security_group_ids      = [var.vpc_security_group_ids.id] #[aws_security_group.sg.id]
   subnet_id                   = var.subnet_id                   #aws_subnet.subnet.id
   key_name                    = aws_key_pair.kp.key_name
+  iam_instance_profile        = aws_iam_instance_profile.gitlab_ec2_instance_profile.name
 
   root_block_device {
     delete_on_termination = true
@@ -38,7 +39,7 @@ resource "aws_instance" "instance" {
     "KeepInstanceRunning" = "false"
   }
 
-   provisioner "file" {
+  provisioner "file" {
     source      = "$HOME/.ssh/mykey.pem"
     destination = "/home/ubuntu/mykey.pem"
   }
@@ -46,7 +47,7 @@ resource "aws_instance" "instance" {
 
 resource "aws_launch_configuration" "asg_launch_config" {
   name            = var.asg_name
-  image_id        = var.instance_ami                   # Replace with your desired AMI ID
+  image_id        = var.instance_ami                # Replace with your desired AMI ID
   instance_type   = "t4g.nano"                      # Replace with your desired instance type
   security_groups = [var.vpc_security_group_ids.id] # Replace with your security group ID
   key_name        = aws_key_pair.kp.key_name        # Replace with your key pair name
