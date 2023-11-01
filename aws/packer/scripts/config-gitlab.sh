@@ -5,7 +5,7 @@ sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmo
 sudo echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt update && apt-cache policy docker-ce
 curl -L "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh" | sudo bash
-sudo apt install -y docker-ce gitlab-runner=16.5.0
+sudo apt install -y docker-ce gitlab-runner=16.5.0 unzip
 sudo usermod -aG docker ${USER}
 wget https://gitlab.com/gitlab-org/fleeting/fleeting-plugin-aws/-/releases/v0.4.0/downloads/fleeting-plugin-aws-linux-arm64
 sudo chmod +x fleeting-plugin-aws-linux-arm64  

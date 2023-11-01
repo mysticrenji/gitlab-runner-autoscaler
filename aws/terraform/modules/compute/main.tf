@@ -40,8 +40,15 @@ resource "aws_instance" "instance" {
   }
 
   provisioner "file" {
-    source      = "$HOME/.ssh/mykey.pem"
+    source      = "/home/codespace/.ssh/mykey.pem"
     destination = "/home/ubuntu/mykey.pem"
+
+    connection {
+    type     = "ssh"
+    user     = "ubuntu"
+    private_key = "/home/codespace/.ssh/mykey.pem"
+    host     =  "${self.public_dns}"
+  }
   }
 }
 
