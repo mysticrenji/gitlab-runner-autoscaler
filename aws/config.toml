@@ -31,6 +31,7 @@ concurrent = 4
 
     [runners.autoscaler.connector_config]
       username          = "ubuntu"
+      key_path          = "/"
       #use_external_addr = true
 
     [[runners.autoscaler.policy]]

@@ -20,7 +20,7 @@ module "network" {
 
 module "compute" {
   source                 = "./modules/compute/"
-  account_id = var.account_id
+  account_id             = var.account_id
   instance_ami           = var.instance_ami
   aws_region             = var.aws_region
   aws_region_az          = var.aws_region_az
@@ -30,7 +30,7 @@ module "compute" {
   owner                  = var.owner
   vpc_security_group_ids = module.network.vpc_security_group_ids
   subnet_id              = module.network.subnet_id
-
-  depends_on = [module.network]
+  asg_name               = var.asg_name
+  depends_on             = [module.network]
 
 }

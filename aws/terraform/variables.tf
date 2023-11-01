@@ -139,3 +139,8 @@ variable "root_device_size" {
   type        = string
   default     = "30"
 }
+
+variable "asg_name" {
+  type    = string
+  default = "gitlab-runner-autoscaling-group"
+}

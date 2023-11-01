@@ -37,11 +37,16 @@ resource "aws_instance" "instance" {
     "Name"                = "${var.owner}-instance"
     "KeepInstanceRunning" = "false"
   }
+
+   provisioner "file" {
+    source      = "$HOME/.ssh/mykey.pem"
+    destination = "/home/ubuntu/mykey.pem"
+  }
 }
 
 resource "aws_launch_configuration" "asg_launch_config" {
-  name            = "GitLabASG"
-  image_id        = "your_ami_id"                   # Replace with your desired AMI ID
+  name            = var.asg_name
+  image_id        = var.instance_ami                   # Replace with your desired AMI ID
   instance_type   = "t4g.nano"                      # Replace with your desired instance type
   security_groups = [var.vpc_security_group_ids.id] # Replace with your security group ID
   key_name        = aws_key_pair.kp.key_name        # Replace with your key pair name
@@ -61,7 +66,7 @@ resource "aws_autoscaling_group" "gitlab_runner_autoscaling_group" {
 }
 
 resource "aws_iam_role" "gitlab_runner_iam_role" {
-  name = "GitLabRunnerIAMRole"
+  name = "GitLabRunnerASGIAMRole"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -145,7 +150,7 @@ data "aws_iam_policy_document" "policy_document" {
 }
 
 resource "aws_iam_instance_profile" "gitlab_ec2_instance_profile" {
-  name = "GitLabRunnerInstanceProfile"
+  name = "GitLabRunnerEC2InstanceProfile"
   role = aws_iam_role.gitlab_runner_iam_role.name
 }
 

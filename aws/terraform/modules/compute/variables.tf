@@ -8,4 +8,6 @@ variable "owner" {}
 variable "vpc_security_group_ids" {}
 variable "subnet_id" {}
 variable "account_id" {}
+variable "asg_name" {
 
+}

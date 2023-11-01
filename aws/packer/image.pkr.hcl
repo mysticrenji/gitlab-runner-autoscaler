@@ -8,13 +8,13 @@ packer {
 }
 
 source "amazon-ebs" "ubuntu" {
-  ami_name      = "gitlab-runner-ami"
-  instance_type = "t4g.nano"
-  region        = "eu-central-1"
-  source_ami    = "ami-0479653c00e0a5e59"
-  ssh_username  = "ubuntu"
+  ami_name                    = "gitlab-runner-ami"
+  instance_type               = "t4g.nano"
+  region                      = "eu-central-1"
+  source_ami                  = "ami-0479653c00e0a5e59"
+  ssh_username                = "ubuntu"
   associate_public_ip_address = true
-  communicator = "ssh"
+  communicator                = "ssh"
 }
 
 build {
