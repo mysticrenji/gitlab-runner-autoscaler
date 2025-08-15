@@ -5,7 +5,7 @@ stages:          # List of stages for jobs, and their order of execution
 
 build-job-aws:       # This job runs in the build stage, which runs first.
   stage: build
-  image: arm64v8/ubuntu:23.10
+  image: arm64v8/ubuntu:mantic-20240530
   script:
     - echo "Compiling the code..."
     - echo "Compile complete."
